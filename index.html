@@ -1,2 +1,60 @@
-<h1>Hello World</h1>
-<A HREF="validity/">Validate Account</A>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Verificando cuenta...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      .message {
+        text-align: center;
+        max-width: 300px;
+      }
+
+      .spinner {
+        margin: 20px auto;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ccc;
+        border-top-color: #4caf50;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="message">
+      <div class="spinner"></div>
+      <p>Verificando tu cuenta, abre la app FixFlats si no se abre automáticamente.</p>
+    </div>
+
+    <script>
+      const query = new URLSearchParams(window.location.search);
+      const userId = query.get("userId");
+      const secret = query.get("secret");
+
+      if (userId && secret) {
+        const deepLink = `fixflats://verify?userId=${userId}&secret=${secret}`;
+        window.location.href = deepLink;
+      } else {
+        document.querySelector(".message").innerHTML = "<p>Parámetros inválidos.</p>";
+      }
+    </script>
+  </body>
+</html>
