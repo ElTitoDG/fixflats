@@ -15,12 +15,10 @@
         background-color: #f4f4f4;
         color: #333;
       }
-
       .message {
         text-align: center;
         max-width: 300px;
       }
-
       .spinner {
         margin: 20px auto;
         width: 40px;
@@ -30,11 +28,14 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
-
       @keyframes spin {
         to {
           transform: rotate(360deg);
         }
+      }
+      #manual-link {
+        display: none;
+        margin-top: 20px;
       }
     </style>
   </head>
@@ -42,16 +43,20 @@
     <div class="message">
       <div class="spinner"></div>
       <p>Verificando tu cuenta, abre la app FixFlats si no se abre automáticamente.</p>
+      <a id="manual-link" href="#">Abrir FixFlats manualmente</a>
     </div>
-
     <script>
       const query = new URLSearchParams(window.location.search);
       const userId = query.get("userId");
       const secret = query.get("secret");
-
       if (userId && secret) {
         const deepLink = `fixflats://verify?userId=${userId}&secret=${secret}`;
         window.location.href = deepLink;
+        setTimeout(() => {
+          const link = document.getElementById('manual-link');
+          link.href = deepLink;
+          link.style.display = 'block';
+        }, 2000);
       } else {
         document.querySelector(".message").innerHTML = "<p>Parámetros inválidos.</p>";
       }
