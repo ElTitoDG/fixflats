@@ -149,10 +149,12 @@
             try {
                 await account.updateVerification(userId, secret);
                 statusDiv.textContent = '¡Email verificado con éxito!';
-                await account.deleteSession('current');
+                
             } catch (e) {
                 statusDiv.textContent = 'Error al verificar: ' + (e.message || e);
             }
+
+            await account.deleteSessions();
         }
     </script>
 </body>
