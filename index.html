@@ -147,7 +147,7 @@
             const account = new Appwrite.Account(client);
 
             try {
-                await account.updateVerification({ userId, secret });
+                await account.updateVerification(userId, secret);
                 statusDiv.textContent = '¡Email verificado con éxito!';
             } catch (e) {
                 statusDiv.textContent = 'Error al verificar: ' + (e.message || e);
