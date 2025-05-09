@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verificación de Email</title>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script src="config.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,27 +48,30 @@
             color: #b00;
             margin-left: 5px;
         }
+        #status {
+            margin: 15px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>Verificación de Email</h1>
     
     <div class="instructions">
-        <p>Para verificar tu email, copia los siguientes datos y pégalos en la aplicación o usa la verificación automática:</p>
+        <p>Para verificar tu email, copia los siguientes datos y pégalos en la aplicación o verifica directamente aquí:</p>
     </div>
 
     <div class="verification-data">
         <div class="field-row" id="userIdRow">
             <span class="field-label">User ID:</span>
-            <!-- Aquí se insertará el botón o el texto -->
         </div>
         <div class="field-row" id="secretRow">
             <span class="field-label">Secret:</span>
-            <!-- Aquí se insertará el botón o el texto -->
         </div>
     </div>
 
-    <button class="auto-button" onclick="autoVerify()">Verificación automática en la app</button>
+    <button class="auto-button" onclick="verifyEmail()">Verificar aquí</button>
+    <div id="status"></div>
 
     <div class="instructions">
         <p>Si prefieres hacerlo manualmente:</p>
@@ -121,13 +126,31 @@
             secretRow.appendChild(span);
         }
 
-        // Verificación automática: redirige a la app usando un deep link
-        function autoVerify() {
-            if (userId && secret) {
-                // Cambia el esquema 'fixflats' por el de tu app si es diferente
-                window.location.href = `fixflats://verify?userId=${encodeURIComponent(userId)}&secret=${encodeURIComponent(secret)}`;
-            } else {
-                alert('Faltan datos para la verificación automática.');
+        // Verificación directa con Appwrite
+        async function verifyEmail() {
+            if (!userId || !secret) {
+                alert('Faltan datos para la verificación.');
+                return;
+            }
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = 'Verificando...';
+
+            // Usar la configuración del archivo config.js
+            const endpoint = window.APPWRITE_CONFIG.endpoint;
+            const projectId = window.APPWRITE_CONFIG.projectId;
+
+            const client = new Appwrite.Client();
+            client
+                .setEndpoint(endpoint)
+                .setProject(projectId);
+
+            const account = new Appwrite.Account(client);
+
+            try {
+                await account.updateVerification({ userId, secret });
+                statusDiv.textContent = '¡Email verificado con éxito!';
+            } catch (e) {
+                statusDiv.textContent = 'Error al verificar: ' + (e.message || e);
             }
         }
     </script>
