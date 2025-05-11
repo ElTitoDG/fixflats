@@ -3,50 +3,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('userId');
 const secret = urlParams.get('secret');
 
-// Función para inicializar los botones y elementos
-function initializeUI() {
-    // User ID
-    const userIdRow = document.getElementById('userIdRow');
-    if (userId) {
-        const btn = document.createElement('button');
-        btn.className = 'copy-button';
-        btn.textContent = 'Copiar User ID';
-        btn.onclick = function() {
-            navigator.clipboard.writeText(userId).then(() => {
-                alert('Copiado al portapapeles');
-            });
-        };
-        userIdRow.appendChild(btn);
-    } else {
-        const span = document.createElement('span');
-        span.className = 'no-disponible';
-        span.textContent = 'No disponible';
-        userIdRow.appendChild(span);
-    }
-
-    // Secret
-    const secretRow = document.getElementById('secretRow');
-    if (secret) {
-        const btn = document.createElement('button');
-        btn.className = 'copy-button';
-        btn.textContent = 'Copiar Secret';
-        btn.onclick = function() {
-            navigator.clipboard.writeText(secret).then(() => {
-                alert('Copiado al portapapeles');
-            });
-        };
-        secretRow.appendChild(btn);
-    } else {
-        const span = document.createElement('span');
-        span.className = 'no-disponible';
-        span.textContent = 'No disponible';
-        secretRow.appendChild(span);
-    }
-}
-
-// Esperar a que el DOM esté cargado
-document.addEventListener('DOMContentLoaded', initializeUI);
-
 // Verificación directa con Appwrite
 async function verifyEmail() {
     if (!userId || !secret) {
